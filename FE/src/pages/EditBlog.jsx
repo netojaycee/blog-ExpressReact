@@ -90,16 +90,16 @@ export default function EditBlog() {
   };
 
   return (
-    <Card color="transparent" shadow={false} className="items-center">
+    <Card color="transparent" shadow={false} className="w-2/3 mt-[100px] mx-auto p-5 items-center shadow-2xl">
       <Typography variant="h4" color="blue-gray">
         Edit Blog
       </Typography>
       <form
         onSubmit={handleSubmit}
         method="post"
-        className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96"
+        className="mt-8 mb-2 w-full p-6"
       >
-        <div className="mb-4 flex flex-col gap-6">
+        <div className="mb-4 w-full flex flex-col gap-6">
           <Input
             size="lg"
             label="Title"
@@ -148,7 +148,7 @@ export default function EditBlog() {
           />
           {errors.image && <span className="text-red-500">{errors.image}</span>}
         </div>
-        <Button type="submit" className="mt-6" fullWidth>
+        <Button type="submit" className="mt-6 bg-primary" fullWidth>
           Save Changes
         </Button>
       </form>

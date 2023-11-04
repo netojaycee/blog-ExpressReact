@@ -16,7 +16,7 @@ export const mustAuth: RequestHandler = async (req, res, next) => {
 
     // Fetch user data from the database based on the decoded user ID
     const id = decoded.userId;
-    console.log(id)
+    // console.log(id)
 
     const userQuery = 'SELECT * FROM users WHERE id = ?';
     db.query(userQuery, [id], (err, results) => {
