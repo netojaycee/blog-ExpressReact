@@ -1,6 +1,10 @@
 import { Card, Typography } from "@material-tailwind/react";
 import { useState, useEffect } from 'react'
 import axios from 'axios';
+import {
+  PencilSquareIcon,
+  TrashIcon
+} from "@heroicons/react/24/solid";
  
 
 
@@ -46,36 +50,35 @@ const TABLE_ROWS = [
 
 //  fetch all blogs from endpoint
 
-const [blogs, setBlogs] = useState([]);
+// const [blogs, setBlogs] = useState([]);
 
-  useEffect(() => {
-    // Make a GET request to your API endpoint
-    axios.get('your-api-endpoint')
-      .then(response => {
-        setBlogs(response.data); // Assuming the response contains an array of blogs
-      })
-      .catch(error => {
-        console.error('Error fetching blogs:', error);
-      });
-  }, []); 
+//   useEffect(() => {
+//     axios.get('your-api-endpoint')
+//       .then(response => {
+//         setBlogs(response.data); 
+//       })
+//       .catch(error => {
+//         console.error('Error fetching blogs:', error);
+//       });
+//   }, []); 
 
 
  
 export default function Main() {
   return (
-    <Card className="h-full w-full overflow-scroll">
+    <Card className="h-full w-full overflow-hidden m-4 p-3">
       <table className="w-full min-w-max table-auto text-left">
         <thead>
           <tr>
             {TABLE_HEAD.map((head) => (
               <th
                 key={head}
-                className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
+                className="border-b border-blue-gray-100 bg-primary  p-4"
               >
                 <Typography
                   variant="small"
                   color="blue-gray"
-                  className="font-normal leading-none opacity-70"
+                  className="font-normal text-primary_variant leading-none opacity-70"
                 >
                   {head}
                 </Typography>
@@ -89,7 +92,7 @@ export default function Main() {
             const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
  
             return (
-              <tr key={Title}>
+              <tr key={index}>
                 <td className={classes}>
                   <Typography
                     variant="small"
@@ -119,7 +122,7 @@ export default function Main() {
                 </td>
                
                 <td className={classes}>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-4">
                   <Typography
                     as="a"
                     href="#"
@@ -127,7 +130,7 @@ export default function Main() {
                     color="blue-gray"
                     className="font-medium m-2"
                   >
-                    Edit
+                    <PencilSquareIcon className="h-5 w-5" />
                   </Typography>
 
                   <Typography
@@ -137,7 +140,7 @@ export default function Main() {
                     color="blue-gray"
                     className="font-medium"
                   >
-                    Delete
+                    <TrashIcon className="h-5 w-5" />
                   </Typography>
                   </div>
                 </td>

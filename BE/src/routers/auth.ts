@@ -7,7 +7,7 @@ const router = Router();
 
 
 router.post('/create', createUser)
-router.post('/login', loginUser)
+router.post('/login', loginUser, mustAuth)
 router.post('/logout', mustAuth, logoutUser)
 
 export default router

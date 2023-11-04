@@ -9,6 +9,7 @@ import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import Register from './pages/Register'
 import AddBlog from './pages/AddBlog'
+import EditBlog from './pages/EditBlog'
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
       <Route path="/admin/register" element={<Register />} />
       <Route path="/admin/dashboard" element={<Dashboard />} />
       <Route path="/admin/addblog" element={<AddBlog />} />
+      <Route path="/admin/editblog" element={<EditBlog />} />
     </Routes>
     </BrowserRouter>
      
