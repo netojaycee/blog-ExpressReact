@@ -46,7 +46,7 @@ export const loginUser: RequestHandler = async(req, res) => {
     db.query(checkUser, values, (err, results) => {
       if (err) {
         console.error(err);
-        return res.status(500).json({ error: 'Internal Server Error' });
+        return res.status(500).json({ error: 'Internal Server Error' }); 
       }
   
       if (results.length === 0) {
