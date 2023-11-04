@@ -1,7 +1,6 @@
 import { RequestHandler } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { db } from '../src/index'
-import { User } from '#/controller/user';
 
 
 export const mustAuth: RequestHandler = async (req, res, next) => {

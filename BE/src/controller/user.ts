@@ -58,20 +58,18 @@ export const loginUser: RequestHandler = async(req, res) => {
       const secret = "mhapyblog"
       const token = jwt.sign({ userId: user.id }, secret);
 
+
       db.query('UPDATE users SET token = ? WHERE id = ?', [token, user.id], (error, results) => {
         if (error) {
           console.error(error);
           return res.status(500).json({ error: 'Internal Server Error' });
         }
-      
-        console.log(token);
-      
         // Assuming the update was successful, you can send the token in the response
-        res.json({ token });
+        // res.json({ token });
       });
-      
+
         
-      return res.json({ message: 'Login successful'});
+      return res.json({ message: 'You have successfully logged in!', token});
     });
   };
 
@@ -86,7 +84,7 @@ export const logoutUser: RequestHandler = async (req, res) => {
         return res.status(500).json({ error: 'Internal Server Error' });
       }
   
-      res.json({ message: 'Logout successful' });
+      res.json({ message: 'You are successfully logged out!' });
     });
   };
   
