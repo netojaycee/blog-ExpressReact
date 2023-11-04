@@ -1,5 +1,6 @@
 import  express from "express"
 import authRouter from './routers/auth'
+import blogRouter from './routers/blog'
 import mysql from 'mysql'
 import cors from 'cors'
 
@@ -8,6 +9,7 @@ const app = express();
 app.use(cors());
 app.use(express.json())
 app.use("/auth", authRouter);
+app.use("/blog", blogRouter);
 
 
 import "dotenv/config";
@@ -41,7 +43,7 @@ function createAnotherTable() {
       title VARCHAR(100),
       description VARCHAR(100),
       tag VARCHAR(100), 
-      image VARCHAR(255) NOT NULL,
+      image VARCHAR(255),
       time INT,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -53,7 +55,7 @@ function createAnotherTable() {
 }
 
 createAnotherTable();
-
+ 
 
 const PORT = 7979
 

@@ -1,7 +1,6 @@
 import { RequestHandler } from "express";
 import { db } from '../index'
 import bcrypt from 'bcrypt'
-import { verify, sign } from "jsonwebtoken"
 import jwt from "jsonwebtoken"
 
 
@@ -22,11 +21,7 @@ export const createUser: RequestHandler = async (req, res) => {
     const { username, password } = req.body;
   
     // Hash the password using bcrypt
-    bcrypt.hash(password, 10, async (err, hashedPassword) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ error: 'Internal Server Error' });
-      }
+    
   
       const user = 'INSERT INTO users (`username`, `password`) VALUES (?, ?)';
       const values = [username, password]; // Use the hashed password
@@ -36,9 +31,9 @@ export const createUser: RequestHandler = async (req, res) => {
           console.error(dbErr);
           return res.status(500).json({ error: 'Internal Server Error' });
         }
-        return res.json({ message: 'User created successfully' });
+        return res.json({ message: 'User created successfully', values });
       });
-    });
+    
   };
   
 
