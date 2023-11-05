@@ -66,7 +66,7 @@ export default function AddBlog() {
         formDataWithImage.append("time", formData.time);
         formDataWithImage.append("image", formData.image);
 
-        const response = await axios.post("/api/blogs/add", formDataWithImage);
+        const response = await axios.post("http://localhost:7979/blog", formDataWithImage);
 
         console.log(response.data);
 
@@ -113,7 +113,7 @@ export default function AddBlog() {
   };
 
   return (
-    <Card color="transparent" shadow={false} className="items-center">
+    <Card color="transparent" shadow={false} className="w-1/3 mt-[100px] mx-auto p-5 items-center shadow-2xl">
       <Typography variant="h4" color="blue-gray">
         Add Blog
       </Typography>
@@ -144,7 +144,7 @@ export default function AddBlog() {
           <Input size="lg" label="Image" type="file" accept="image/*" name="image" onChange={handleImageChange} />
           {errors.image && <span className="text-red-500">{errors.image}</span>}
         </div>
-        <Button type="submit" className="mt-6" fullWidth>
+        <Button type="submit" className="bg-primary mt-6" fullWidth>
           Add Blog
         </Button>
       </form>

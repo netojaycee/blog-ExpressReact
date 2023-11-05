@@ -28,7 +28,7 @@ function App() {
       <Route path="/admin/register" element={<Register />} />
       <Route path="/admin/dashboard" element={<Dashboard />} />
       <Route path="/admin/addblog" element={<AddBlog />} />
-      <Route path="/admin/editblog" element={<EditBlog />} />
+      <Route path="/admin/editblog/:id" element={<EditBlog />} />
     </Routes>
     </BrowserRouter>
      

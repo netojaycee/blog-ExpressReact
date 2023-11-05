@@ -22,56 +22,19 @@ export default function EditBlog() {
   });
 
   useEffect(() => {
-    // Fetch blog data by ID and populate the form
-    axios.get(`/api/blogs/${id}`).then((response) => {
+    axios.get(`http://localhost:7979/blog/${id}`).then((response) => {
       const blogData = response.data;
       setFormData({
         title: blogData.title,
         description: blogData.description,
         tag: blogData.tag,
         time: blogData.time,
-        image: null, // You may want to fetch the image URL as well
+        image: null, // You may need to handle images separately, as they can't be pre-filled in a file input
+
       });
+      
     });
   }, [id]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    let formIsValid = true;
-
-    // Validate title (similar to what you did in AddBlog)
-    // ...
-
-    if (formIsValid) {
-      try {
-        const formDataWithImage = new FormData();
-        formDataWithImage.append("title", formData.title);
-        formDataWithImage.append("description", formData.description);
-        formDataWithImage.append("tag", formData.tag);
-        formDataWithImage.append("time", formData.time);
-        formDataWithImage.append("image", formData.image);
-
-        const response = await axios.put(`/api/blogs/${id}`, formDataWithImage);
-
-        console.log(response.data);
-
-        Swal.fire({
-          icon: "success",
-          title: "Blog Edited Successfully",
-          text: "You have successfully edited the blog!",
-        });
-      } catch (error) {
-        console.error("An unexpected error occurred:", error);
-
-        Swal.fire({
-          icon: "error",
-          title: "Blog Editing Failed",
-          text: "An error occurred while editing the blog.",
-        });
-      }
-    }
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -89,17 +52,53 @@ export default function EditBlog() {
     });
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Your validation code goes here
+
+    try {
+      const formDataWithImage = new FormData();
+      formDataWithImage.append("title", formData.title);
+      formDataWithImage.append("description", formData.description);
+      formDataWithImage.append("tag", formData.tag);
+      formDataWithImage.append("time", formData.time);
+      formDataWithImage.append("image", formData.image);
+
+      const response = await axios.patch(
+        `http://localhost:7979/blog/${id}`,
+        formDataWithImage
+      );
+
+      if (response.data.status === "success") {
+        Swal.fire({
+          icon: "success",
+          title: "Blog Updated Successfully",
+          text: response.data.message,
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Blog Update Failed",
+          text: response.data.message,
+        });
+      }
+    } catch (error) {
+      console.error("An unexpected error occurred:", error);
+    }
+  };    
+
   return (
-    <Card color="transparent" shadow={false} className="items-center">
+    <Card color="transparent" shadow={false} className="w-2/3 mt-[100px] mx-auto p-5 items-center shadow-2xl">
       <Typography variant="h4" color="blue-gray">
         Edit Blog
       </Typography>
       <form
         onSubmit={handleSubmit}
         method="post"
-        className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96"
+        className="mt-8 mb-2 w-full p-6"
       >
-        <div className="mb-4 flex flex-col gap-6">
+        <div className="mb-4 w-full flex flex-col gap-6">
           <Input
             size="lg"
             label="Title"
@@ -148,7 +147,7 @@ export default function EditBlog() {
           />
           {errors.image && <span className="text-red-500">{errors.image}</span>}
         </div>
-        <Button type="submit" className="mt-6" fullWidth>
+        <Button type="submit" className="mt-6 bg-primary" fullWidth>
           Save Changes
         </Button>
       </form>
