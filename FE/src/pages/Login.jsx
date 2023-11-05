@@ -8,9 +8,14 @@ import { useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate  } from 'react-router-dom';
+import useProtectedRouteLogin from "../utils/guardLogin";
 
 
 export default function Login() {
+useProtectedRouteLogin();
+  
+
+
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [errors, setErrors] = useState({ username: "", password: "" });
   let navigate = useNavigate();

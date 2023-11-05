@@ -7,12 +7,9 @@ import { useNavigate } from "react-router-dom";
 
 const TABLE_HEAD = ["Image", "Title", "Description"];
 
-
-
 export default function Main() {
   const [blogs, setBlogs] = useState([]);
   let navigate = useNavigate();
-
 
   useEffect(() => {
     // Define the backend endpoint for fetching blogs
@@ -34,31 +31,21 @@ export default function Main() {
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(`http://localhost:7979/blog/${id}`);
-      if (response.data.status === "success") {
+
         Swal.fire({
           icon: "success",
           title: "Blog Deleted Successfully",
           text: response.data.message,
         });
-        fetchBlogs();
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Blog Deletion Failed",
-          // text: response.data.message,
-        });
-      }
+        const updatedBlogs = await axios.get("http://localhost:7979/blog/all-blog");
+        setBlogs(updatedBlogs.data);
+      
     } catch (error) {
-      console.error("An unexpected error occurred:", error);
-    }
-  };
-
-  const handleEdit = async (id) => {
-    try {
-      const response = await axios.patch(`http://localhost:7979/blog/${id}`);
-      console.log(response.data);
-      // fetchBlogs();
-    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Blog Deletion Failed",
+        text: "failed to delete blog",
+      });
       console.error("An unexpected error occurred:", error);
     }
   };
@@ -120,7 +107,7 @@ export default function Main() {
                   <Typography
                     as="a"
                     href="#"
-                    onClick={() => navigate(`/admin/editblog/${blog.id}`)}     
+                    onClick={() => navigate(`/admin/editblog/${blog.id}`)}
                     variant="small"
                     color="blue-gray"
                     className="font-medium m-2"
@@ -131,7 +118,7 @@ export default function Main() {
                   <Typography
                     as="a"
                     href="#"
-                    onClick={handleDelete}
+                    onClick={() => handleDelete(blog.id)}
                     variant="small"
                     color="blue-gray"
                     className="font-medium"

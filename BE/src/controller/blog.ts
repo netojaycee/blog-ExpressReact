@@ -102,21 +102,7 @@ export const GetSingleBlog: RequestHandler = (req, res) => {
 
     db.query('SELECT * FROM blogs WHERE id = ?', [blogId], (error, results) => {
       if (error) throw error;
-<<<<<<< HEAD
-      res.json({ blogId, message: 'Blog deleted'}); 
-   });
-  
-}
-
-export const getSingleBlog: RequestHandler = (req, res) => {
-    const { blogId } = req.params;
-
-    db.query('SELECT FROM blogs WHERE id = ?', [blogId], (error, results) => {
-      if (error) throw error;
-      res.json( results ); 
-=======
       res.json(results);
->>>>>>> b1c8131ebc64836e482fe54e416f3c8082b5fae7
    });
   
 }
