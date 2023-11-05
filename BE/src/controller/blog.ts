@@ -88,11 +88,21 @@ export const Updateblog: RequestHandler = (req, res) => {
 }
 
 export const Deleteblog: RequestHandler = (req, res) => {
+  const { blogId } = req.params;
+
+  db.query('DELETE FROM blogs WHERE id = ?', [blogId], (error, results) => {
+    if (error) throw error;
+    res.json({ blogId, message: 'Blog deleted'});
+ });
+
+}
+
+export const GetSingleBlog: RequestHandler = (req, res) => {
     const { blogId } = req.params;
 
-    db.query('DELETE FROM blogs WHERE id = ?', [blogId], (error, results) => {
+    db.query('SELECT * FROM blogs WHERE id = ?', [blogId], (error, results) => {
       if (error) throw error;
-      res.json({ blogId, message: 'Blog deleted'});
+      res.json(results);
    });
   
 }

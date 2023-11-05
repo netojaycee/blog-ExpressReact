@@ -66,7 +66,7 @@ export default function AddBlog() {
         formDataWithImage.append("time", formData.time);
         formDataWithImage.append("image", formData.image);
 
-        const response = await axios.post("/api/blogs/add", formDataWithImage);
+        const response = await axios.post("http://localhost:7979/blog", formDataWithImage);
 
         console.log(response.data);
 
