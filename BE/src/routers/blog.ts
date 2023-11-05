@@ -1,4 +1,4 @@
-import { Deleteblog, Updateblog, allBlog, createBlog } from "#/controller/blog";
+import { Deleteblog, Updateblog, allBlog, createBlog, getSingleBlog } from "#/controller/blog";
 import { Router } from "express";
 import fileParser from "middleware/fileparser";
 import { mustAuth } from "middleware/mustAuth";
@@ -7,9 +7,10 @@ import { mustAuth } from "middleware/mustAuth";
 const router = Router();
 
 
-// router.post('/create', createBlog);
+router.post('/create', createBlog);
 router.get('/all-blog', allBlog);
 router.patch('/:blogId', Updateblog);
 router.delete('/:blogId', Deleteblog);
+router.get('/:blogId', getSingleBlog);
 
 export default router

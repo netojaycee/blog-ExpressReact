@@ -8,22 +8,22 @@ interface RequestWithFiles extends Request{
     files?:{[key:string]: File}
 }
 
-// export const createBlog: RequestHandler = async (req, res) =>{
-//     const {title, description, tag, time, image } = req.body
-//     const photo = req.files?.image as formidable.File
+export const createBlog: RequestHandler = async (req, res) =>{
+    const {title, description, tag, time, image } = req.body
+    const photo = req.files?.image as formidable.File
 
-//     const blogs = 'INSERT INTO blogs (`title`, `description`, `tag`, `time`, `image`) VALUES (?, ?, ?, ?, ?)';
-//     const values = [title, description, tag, time, image];
+    const blogs = 'INSERT INTO blogs (`title`, `description`, `tag`, `time`, `image`) VALUES (?, ?, ?, ?, ?)';
+    const values = [title, description, tag, time, image];
 
-//     db.query(blogs, values, (dbErr, result) => {
-//       if (dbErr) { 
-//         console.error(dbErr);
-//         return res.status(500).json({ error: 'Internal Server Error' });
-//       }
-//       return res.json({ message: 'Blog created successfully', values });
-//     });
+    db.query(blogs, values, (dbErr, result) => {
+      if (dbErr) { 
+        console.error(dbErr);
+        return res.status(500).json({ error: 'Internal Server Error' });
+      }
+      return res.json({ message: 'Blog created successfully', values });
+    });
 
-// }
+}
 
 
 // export const createBlog: RequestHandler = async (req, res) => {
@@ -92,7 +92,17 @@ export const Deleteblog: RequestHandler = (req, res) => {
 
     db.query('DELETE FROM blogs WHERE id = ?', [blogId], (error, results) => {
       if (error) throw error;
-      res.json({ blogId, message: 'Blog deleted'});
+      res.json({ blogId, message: 'Blog deleted'}); 
+   });
+  
+}
+
+export const getSingleBlog: RequestHandler = (req, res) => {
+    const { blogId } = req.params;
+
+    db.query('SELECT FROM blogs WHERE id = ?', [blogId], (error, results) => {
+      if (error) throw error;
+      res.json( results ); 
    });
   
 }

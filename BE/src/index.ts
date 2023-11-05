@@ -31,7 +31,7 @@ function createTable(){
     )`, (err:any) =>{
         if(err) throw new Error(err);
         console.log("Table created/exists");
-    }
+    } 
     );
 }
 
