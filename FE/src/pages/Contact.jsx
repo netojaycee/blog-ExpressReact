@@ -1,8 +1,10 @@
 import { ContactForm } from "../components/Contact-form";
+import Layout from "../components/LayoutSite";
 
 function Contact() {
   return (
     <>
+    <Layout>
       <div className="flex gap-4 w-full mb-40 md:mb-4 md:px-40 underline-none ">
         <section className="w-full flex underline-none flex-col  relative bg-primary-500 mt-0">
           <div className="md:flex-row flex flex-col w-full justify-between gap-10 md:mt-28 relative object-contain">
@@ -28,6 +30,7 @@ function Contact() {
           </div>
         </section>
       </div>
+      </Layout>
     </>
   );
 }

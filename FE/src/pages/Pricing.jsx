@@ -1,9 +1,11 @@
 import React from 'react'
 import { PricingCard } from '../components/PricingCard'
+import Layout from '../components/LayoutSite'
 
 export default function Pricing() {
   return (
     <>
+    <Layout>
       <div className='column'>
         <h2 className='p-11 text-3xl'>Pricing Plan</h2>
         <p className='page-titl md:text4-xl text-2xl text-center text-primary  font-bold my-4'>Mhapy is absolutely Free for Individuals</p>
@@ -53,6 +55,7 @@ export default function Pricing() {
 
 
       </div>
+      </Layout>
     </>
   )
 }

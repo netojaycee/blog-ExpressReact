@@ -1,7 +1,9 @@
 import React from 'react'
+import Layout from '../components/LayoutSite'
 
 export default function Privacy() {
   return (
+    <Layout>
     <div className="flex gap-4 w-full mb-40 md:mb-4 md:px-40 underline-none ">
       <section className="w-full flex underline-none flex-col lg:text-left text-center relative bg-primary-500 mt-10">
         <p>
@@ -133,9 +135,10 @@ export default function Privacy() {
         </p>
 
         <p className="font-bold tex-xl">CONTACT US</p> &nbsp;
-        <p>If you have questions or comments about this Privacy Policy, please <a href="/contact-us" className='text-primary font-bold'>contact us</a> here
+        <p>If you have questions or comments about this Privacy Policy, please <a href="/contact" className='text-primary font-bold'>contact us</a> here
         </p>  &nbsp;
       </section>
     </div>
+    </Layout>
   )
 }

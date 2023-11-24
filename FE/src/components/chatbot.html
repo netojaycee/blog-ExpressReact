@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ruby Chatbot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fjalla+One&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+</head>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  input::-webkit-input-placeholder {
+    /* WebKit browsers */
+    color: #727272;
+    ;
+  }
+
+  input:-moz-placeholder {
+    /* Mozilla Firefox 4 to 18 */
+    color: #727272;
+    ;
+  }
+
+  input::-moz-placeholder {
+    /* Mozilla Firefox 19+ */
+    color: #727272;
+    ;
+  }
+
+  input:-ms-input-placeholder {
+    /* Internet Explorer 10+ */
+    color: #727272;
+    ;
+  }
+
+  #chatbot-widget {
+    position: fixed;
+    display: none;
+    bottom: 20px;
+    right: 20px;
+    width: 350px;
+    height: auto;
+    border-radius: 5px;
+    background-color: #fff;
+    z-index: 999;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  }
+
+  #chatbot-header {
+    border-radius: 8px;
+  }
+
+  #chatbot-input-wrapper {
+    padding: 0.5rem;
+  }
+
+
+  #chatbot-messages-container {
+    height: 350px;
+    padding: 10px;
+  }
+
+  @media (max-width: 768px) {
+
+    #chatbot-widget {
+      position: fixed;
+      display: none;
+      bottom: 0;
+      right: 0;
+      width: 100%;
+      height: 100vh;
+      border-radius: 0px;
+      background-color: #fff;
+      z-index: 999;
+      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    }
+
+
+    #chatbot-input-wrapper {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      background-color: #fff;
+    }
+
+    #chatbot-input-wrapper {
+      padding: 0;
+    }
+
+    #chatbot-header {
+      border-radius: 0px;
+    }
+
+    #chatbot-messages-container {
+      height: calc(100vh - 240px);
+      padding-bottom: 50px;
+
+    }
+  }
+</style>
+
+<body style="font-family: 'Poppins', sans-serif; font-size: 14px;">
+  <!-- Your existing HTML code for the chatbot widget goes here -->
+  <div id="chatbot-widget">
+    <div>
+      <div id="chatbot-header"
+        style="padding: 1rem;  background-color: #451891; color: #fff; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);">
+        <div style="display: flex; align-items: center; ">
+          <div style="border: none; background-color: transparent; color: #fff; cursor: pointer;">
+            <svg id="chatbot-close-btn" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+              style="fill: rgb(255, 255, 255);">
+              <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path>
+            </svg>
+          </div>
+
+          <div style="display: flex; align-items: center; justify-content: center; flex: 1; margin-bottom: 0.5rem;">
+            <div style="display: flex; align-items: center; justify-content: center; margin-left: -33px;">
+              <div style="width: 20px; height: 20px; border-radius: 50%;">
+                <img src="img/bot-icon.svg" alt="bot-icon"
+                  style="object-fit: cover; width: 100%; height: 100%;  border-radius: 50%;">
+              </div>
+              <span style="font-weight: 500; margin-left: 0.5rem;">Ruby</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+
+          <p style="color: rgb(249 250 251); text-align: center; font-size: 12px; padding-bottom: 0.5rem;">
+            Hi there 👋 <br />
+            I am here to help, if you close the chatbot, you will receive a response via email. Be sure to share your
+            email so we can better assist you."
+          </p>
+        </div>
+      </div>
+    </div>
+    <div id="chatbot-messages-container" style="overflow-y: scroll;">
+    </div>
+    <div id="chatbot-input-wrapper">
+      <div style="display: flex; flex-direction: row; background: #F1F1F1; padding: 0.5rem; border-radius: 8px;">
+        <input id="chatbot-input" type="text" placeholder="Type your message here"
+          style="flex: 1; padding: 0.5rem; border: none; font-size: 14px; background: #F1F1F1; appearance: none; outline: none; ">
+        <button id="chatbot-send-btn"
+          style="margin-left: 8px; border: none; background-color: #451891; color: #fff; font-size: 14px; font-weight: semibold; cursor: pointer; border-radius: 8px; padding: 0.5rem 1rem;">Send</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="chatbot-icon"
+    style="position: fixed; bottom: 20px; right: 20px; width: 70px; height: 70px; border-radius: 50%; background-color: #451891; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 999;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"
+      style="fill: rgb(255, 255, 255);transform: ;msFilter:;">
+      <path
+        d="M16 14h.5c.827 0 1.5-.673 1.5-1.5v-9c0-.827-.673-1.5-1.5-1.5h-13C2.673 2 2 2.673 2 3.5V18l5.333-4H16zm-9.333-2L4 14V4h12v8H6.667z">
+      </path>
+      <path
+        d="M20.5 8H20v6.001c0 1.1-.893 1.993-1.99 1.999H8v.5c0 .827.673 1.5 1.5 1.5h7.167L22 22V9.5c0-.827-.673-1.5-1.5-1.5z">
+      </path>
+    </svg>
+  </div>
+
+  <script>
+    // Your JavaScript code goes here
+
+    function get_param(name) {
+      if (name === (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(location.search))
+        return decodeURIComponent(name[1]);
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const url = window.location.href
+    const api_token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjRhMGI0YzBkLTk0NTctNDY0NC1iMDBiLWJiYzYzOTFmN2FhOSIsImV4cCI6MTcwNzc2MzU2NX0.bxomUI4qHmxo-PakqWi74B3dgLURccVakCpbiSfJruE";
+    const chatbotIcon = document.getElementById('chatbot-icon');
+    const chatbotWidget = document.getElementById('chatbot-widget');
+    const closeButton = document.getElementById('chatbot-close-btn');
+    const messagesContainer = document.getElementById('chatbot-messages-container');
+    const welcomeMessage = document.getElementById('chatbot-welcome-message');
+    const input = document.getElementById('chatbot-input');
+    const sendButton = document.getElementById('chatbot-send-btn');
+    const apiUrl = 'https://mahppy-apis.nn.r.appspot.com/api/v1/send';
+    console.log("Token...................................................")
+    // const api_token = '{{ request.GET.api_key|escapejs }}';
+    let widgetOpenCount = 0;
+
+    function generateUUID() {
+      let uuid = '', i, random;
+      for (i = 0; i < 32; i++) {
+        random = (Math.random() * 16) | 0;
+        if (i === 8 || i === 12 || i === 16 || i === 20) {
+          uuid += '-';
+        }
+        uuid += (i === 12 ? 4 : i === 16 ? (random & 3) | 8 : random).toString(16);
+      }
+      return uuid;
+    }
+    const sessionId = generateUUID();
+    let patient_email = "";
+
+    function preparePayload(message) {
+      return { text: message }
+    }
+
+
+    // Show the chatbot widget and hide the icon
+    chatbotIcon.addEventListener('click', () => {
+
+
+      chatbotWidget.style.display = 'block';
+      chatbotIcon.style.display = 'none';
+      if (widgetOpenCount === 0) {
+        // Show email form only once
+        collectEmail()
+      }
+
+      widgetOpenCount++
+    });
+
+    // Hide the chatbot widget and show the icon
+    closeButton.addEventListener('click', () => {
+      chatbotWidget.style.display = 'none';
+      chatbotIcon.style.display = 'flex';
+    });
+
+    // Send the user's message to the chatbot API when the send button is clicked
+    sendButton.addEventListener('click', () => {
+      const message = input.value.trim();
+      if (message !== '') {
+        addMessage(message, 'user');
+        input.value = '';
+        sendMessageToChatbot(preparePayload(message));
+      }
+    });
+
+    // Send the user's message to the chatbot API when the enter key is pressed
+    input.addEventListener('keydown', (event) => {
+      if (event.keyCode === 13) {
+        event.preventDefault();
+        const message = input.value.trim();
+        if (message !== '') {
+          addMessage(message, 'user');
+          input.value = '';
+
+          sendMessageToChatbot(preparePayload(message));
+        }
+      }
+    });
+
+    function removeMessageByTextContent(text) {
+      const messagesContainer = document.getElementById('messages-container');
+      const messageDivs = messagesContainer.querySelectorAll('div');
+      for (let i = 0; i < messageDivs.length; i++) {
+        const messageDiv = messageDivs[i];
+        if (messageDiv.textContent === text) {
+          messagesContainer.removeChild(messageDiv);
+          break;
+        }
+      }
+    }
+
+    // Add a message to the chatbot messages container
+    function addMessage(message, sender) {
+
+      const bubbleDiv = document.createElement('div');
+      bubbleDiv.style.display = 'flex';
+      bubbleDiv.style.alignItems = 'center';
+      bubbleDiv.style.marginBottom = '10px';
+      bubbleDiv.style.maxWidth = '80%';
+      bubbleDiv.style.wordWrap = 'break-word';
+      bubbleDiv.style.justifyContent = sender === 'user' ? 'flex-end' : 'flex-start';
+      if (sender === 'user') {
+        bubbleDiv.style.marginLeft = 'auto';
+      } else {
+        bubbleDiv.style.marginRight = 'auto';
+      }
+
+      const messageContainer = document.createElement('div');
+      messageContainer.style.display = 'block';
+
+      const iconDiv = document.createElement('div');
+      iconDiv.style.width = '25px';
+      iconDiv.style.height = '25px';
+      iconDiv.style.marginRight = '5px';
+      iconDiv.style.border = '1px solid #451891';
+      iconDiv.style.borderRadius = '50%';
+      iconDiv.style.flex = 'none';
+
+      const iconImg = document.createElement('img');
+      iconImg.src = sender === 'bot' ? "img/bot-icon.svg" : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgu3Is6EWkzisekqHQhRNavQBc3ReX_g4ITUdbpFakTw&s';
+      iconImg.style.width = '100%';
+      iconImg.style.height = '100%';
+      iconImg.style.objectFit = 'cover';
+      iconImg.style.borderRadius = '50%';
+      iconDiv.appendChild(iconImg);
+
+      const messageDiv = document.createElement('div');
+      messageDiv.style.padding = '0.5rem';
+      messageDiv.style.borderRadius = '8px';
+      messageDiv.style.backgroundColor = sender === 'user' ? '#eee' : '#451891';
+      messageDiv.style.color = sender === 'user' ? '#333' : '#fff';
+      messageDiv.innerText = message;
+
+
+      bubbleDiv.appendChild(iconDiv);
+      bubbleDiv.appendChild(messageDiv);
+
+      messageContainer.append(bubbleDiv)
+
+      // Add long press event listener for messages sent by bot
+      if (sender === 'bot') {
+        let isLongPressed = false;
+
+        messageContainer.addEventListener('click', () => {
+          isLongPressed = false;
+
+          setTimeout(() => {
+            if (isLongPressed === false) {
+              isLongPressed = true;
+
+              let thumbsDiv = messageContainer.querySelector('.thumbsDiv');
+              if (!thumbsDiv) {
+                thumbsDiv = document.createElement('div');
+                thumbsDiv.style.marginLeft = '10px';
+                thumbsDiv.style.display = 'flex';
+                thumbsDiv.style.alignItems = 'center';
+                thumbsDiv.classList = 'thumbsDiv active'
+
+                const thumbsUpIcon = document.createElement('span');
+                thumbsUpIcon.innerHTML = '👍'
+                thumbsUpIcon.style.width = '20px';
+                thumbsUpIcon.style.height = '20px';
+                thumbsUpIcon.style.cursor = 'pointer';
+                thumbsUpIcon.style.marginRight = '5px';
+                thumbsUpIcon.addEventListener('click', () => {
+                  alert('hello')
+                })
+
+                const thumbsDownIcon = document.createElement('span');
+                thumbsDownIcon.innerHTML = '👎'
+                thumbsDownIcon.style.width = '20px';
+                thumbsDownIcon.style.height = '20px';
+                thumbsDownIcon.style.cursor = 'pointer';
+                thumbsDownIcon.addEventListener('click', () => {
+                  alert('hello')
+                })
+
+                thumbsDiv.appendChild(thumbsUpIcon);
+                thumbsDiv.appendChild(thumbsDownIcon);
+                messageContainer.appendChild(thumbsDiv);
+              } else {
+                messageContainer.removeChild(thumbsDiv);
+              }
+            }
+          }, 1000);
+        });
+      }
+
+      messagesContainer.appendChild(messageContainer);
+      messagesContainer.style.flexDirection = 'column';
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+
+    // Collect User Email
+    function collectEmail() {
+      const messageParentDiv = document.createElement('div');
+      messageParentDiv.style.border = '0.5px solid #eee';
+      messageParentDiv.style.height = 'auto'
+      messageParentDiv.style.padding = '0.5rem'
+      messageParentDiv.style.borderRadius = '8px'
+
+      const messageDiv = document.createElement('div');
+      messageDiv.style.marginBottom = '10px';
+      messageDiv.style.padding = '0.5rem';
+      messageDiv.style.borderRadius = '8px';
+      messageDiv.style.backgroundColor = '#451891';
+      messageDiv.style.color = '#ffffff';
+      messageDiv.style.maxWidth = '80%';
+      messageDiv.style.wordWrap = 'break-word';
+      messageDiv.style.float = 'left';
+      messageDiv.innerText = 'Please enter your email address:';
+
+      const input = document.createElement('input');
+      input.type = 'email';
+      input.style.marginTop = '5px';
+      input.style.padding = '0.5rem';
+      input.style.borderRadius = '8px';
+      input.style.border = '1px solid #ccc';
+      input.style.width = '80%';
+      input.placeholder = 'email@example.com'
+
+      const button = document.createElement('button');
+      button.style.marginTop = '5px';
+      button.style.padding = '0.5rem';
+      button.style.borderRadius = '8px';
+      button.style.backgroundColor = '#451891';
+      button.style.color = '#fff';
+      button.style.border = 'none';
+      button.style.cursor = 'pointer';
+      button.innerText = 'Submit Email';
+
+      const emailDiv = document.createElement('div');
+      emailDiv.style.marginTop = '10px';
+
+      const thankYouDiv = document.createElement('div');
+      thankYouDiv.style.display = "none";
+
+      button.addEventListener('click', () => {
+        patient_email = input.value;
+        if (patient_email.trim() === '') {
+          emailDiv.innerText = 'Please enter a valid email address';
+        } else {
+          emailDiv.innerText = `Thank you for your email: ${patient_email}`;
+          input.value = ""
+
+          messageDiv.style.display = "none";
+          input.style.display = "none";
+          button.style.display = "none";
+          emailDiv.style.display = "none";
+
+          // Create a new div for the thank you message
+          thankYouDiv.style.display = "block";
+          thankYouDiv.innerText = 'Thank you for submitting your email';
+          thankYouDiv.style.marginTop = '10px';
+
+
+
+          // Hide the thankYouDiv after 5 seconds
+          setTimeout(() => {
+            thankYouDiv.style.display = 'none';
+          }, 5000);
+
+        }
+      });
+
+      messagesContainer.appendChild(messageParentDiv);
+      messageParentDiv.appendChild(messageDiv);
+      messageParentDiv.appendChild(input);
+      messageParentDiv.appendChild(button);
+      messageParentDiv.appendChild(emailDiv);
+      messageParentDiv.appendChild(thankYouDiv);
+      messageParentDiv.scrollTop = messageParentDiv.scrollHeight;
+    }
+
+    // Send the user's message to the chatbot API and display the response
+    function sendMessageToChatbot(message) {
+      // addMessage('', 'bot');
+      message['session_id'] = sessionId;
+      message.patient_email = patient_email;
+      fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${api_token}`
+        },
+        body: JSON.stringify(message)
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.bot_response.questions.length > 0) {
+            // Handle questions
+            handleQuestions(data.bot_response.questions);
+
+          } else {
+            // Handle text response
+            data.bot_response.texts.forEach(element => {
+              addMessage(element, 'bot')
+            }
+            );
+            // Handle buttons response
+            handleButtons(data.bot_response.buttons);
+          }
+        })
+        .catch(error => {
+          console.error(error);
+          addMessage('Sorry, something went wrong.', 'bot');
+        });
+    }
+
+    function handleQuestions(questions) {
+      const questionAnswers = [];
+      const currentQuestion = questions[0];
+      const questionDiv = document.createElement('div');
+      questionDiv.style.marginBottom = '10px';
+      questionDiv.style.padding = '10px';
+      questionDiv.style.borderRadius = '8px';
+      questionDiv.style.backgroundColor = '#451891';
+      questionDiv.style.color = '#fff';
+      questionDiv.style.maxWidth = '80%';
+      questionDiv.style.wordWrap = 'break-word';
+      questionDiv.style.float = 'left';
+      questionDiv.innerText = currentQuestion.text;
+      messagesContainer.appendChild(questionDiv);
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      if (currentQuestion.option_one) {
+        const optionOneButton = createButton(currentQuestion.option_one, () => {
+          questionAnswers.push({ question_id: currentQuestion.pk, answer: currentQuestion.option_one });
+          handleNextQuestion(questions.slice(1), questionAnswers);
+        });
+        messagesContainer.appendChild(optionOneButton);
+      }
+      if (currentQuestion.option_two) {
+        const optionTwoButton = createButton(currentQuestion.option_two, () => {
+          questionAnswers.push({ question_id: currentQuestion.pk, answer: currentQuestion.option_two });
+          handleNextQuestion(questions.slice(1), questionAnswers);
+        });
+        messagesContainer.appendChild(optionTwoButton);
+      }
+
+      if (currentQuestion.option_three) {
+        const optionThreeButton = createButton(currentQuestion.option_three, () => {
+          questionAnswers.push({ question_id: currentQuestion.pk, answer: currentQuestion.option_three });
+          handleNextQuestion(questions.slice(1), questionAnswers);
+        });
+        messagesContainer.appendChild(optionThreeButton);
+      }
+
+      if (currentQuestion.option_four) {
+        const optionFourButton = createButton(currentQuestion.option_four, () => {
+          questionAnswers.push({ question_id: currentQuestion.pk, answer: currentQuestion.option_four });
+          handleNextQuestion(questions.slice(1), questionAnswers);
+        });
+        messagesContainer.appendChild(optionFourButton);
+      }
+
+      if (currentQuestion.option_five) {
+        const optionFiveButton = createButton(currentQuestion.option_five, () => {
+          questionAnswers.push({ question_id: currentQuestion.pk, answer: currentQuestion.option_five });
+          handleNextQuestion(questions.slice(1), questionAnswers);
+        });
+        messagesContainer.appendChild(optionFiveButton);
+      }
+    }
+
+    function handleNextQuestion(questions, questionAnswers) {
+      if (questions.length > 0) {
+        const nextQuestion = questions[0];
+        const nextQuestionDiv = document.createElement('div');
+        nextQuestionDiv.style.marginBottom = '10px';
+        nextQuestionDiv.style.padding = '10px';
+        nextQuestionDiv.style.borderRadius = '8px';
+        nextQuestionDiv.style.backgroundColor = '#451891';
+        nextQuestionDiv.style.color = '#fff';
+        nextQuestionDiv.style.maxWidth = '80%';
+        nextQuestionDiv.style.wordWrap = 'break-word';
+        nextQuestionDiv.style.float = 'left';
+        nextQuestionDiv.innerText = nextQuestion.text;
+        messagesContainer.appendChild(nextQuestionDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        console.log(nextQuestion.pk)
+        if (nextQuestion.option_one) {
+          const optionOneButton = createButton(nextQuestion.option_one, () => {
+            questionAnswers.push({ question_id: nextQuestion.pk, answer: nextQuestion.option_one });
+            handleNextQuestion(questions.slice(1), questionAnswers);
+          });
+          messagesContainer.appendChild(optionOneButton);
+        }
+        if (nextQuestion.option_two) {
+          const optionTwoButton = createButton(nextQuestion.option_two, () => {
+            questionAnswers.push({ question_id: nextQuestion.pk, answer: nextQuestion.option_two });
+            handleNextQuestion(questions.slice(1), questionAnswers);
+            });
+            messagesContainer.appendChild(optionTwoButton);
+            }
+            if (nextQuestion.option_three) {
+              const optionThreeButton = createButton(nextQuestion.option_three, () => {
+                questionAnswers.push({ question_id: nextQuestion.pk, answer: nextQuestion.option_three });
+                handleNextQuestion(questions.slice(1), questionAnswers);
+              });
+              messagesContainer.appendChild(optionThreeButton);
+            }
+            if (nextQuestion.option_four) {
+              const optionFourButton = createButton(nextQuestion.option_four, () => {
+                questionAnswers.push({ question_id: nextQuestion.pk, answer: nextQuestion.option_four });
+                handleNextQuestion(questions.slice(1), questionAnswers);
+              });
+              messagesContainer.appendChild(optionFourButton);
+            }
+            if (nextQuestion.option_five) {
+              const optionFiveButton = createButton(nextQuestion.option_five, () => {
+                questionAnswers.push({ question_id: nextQuestion.pk, answer: nextQuestion.option_five });
+                handleNextQuestion(questions.slice(1), questionAnswers);
+              });
+              messagesContainer.appendChild(optionFiveButton);
+            }
+            } else {
+                // Send the question answers to the chatbot API
+                const payload = {
+
+                    session_id: sessionId,
+                    patient_email: patient_email,
+                    question_answers: questionAnswers
+                }
+                fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Token ${api_token}`
+                    },
+                    body: JSON.stringify(payload)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                    // Handle text response
+                    data.bot_response.texts.forEach(element => {
+                        addMessage(element, 'bot')
+                    }
+                    );
+                    // Handle buttons response
+                    handleButtons(data.bot_response.buttons);
+                    })
+                    .catch(error => {
+                    console.error(error);
+                    addMessage('Sorry, something went wrong.', 'bot');
+                    });
+                }
+            }

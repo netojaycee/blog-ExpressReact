@@ -1,4 +1,3 @@
-'use client';
 
 import React from "react";
 import {
@@ -10,7 +9,7 @@ import {
 } from "@material-tailwind/react";
 
 
-export function Nav() {
+export default function Nav() {
   const [openNav, setOpenNav] = React.useState(false);
 
   React.useEffect(() => {
@@ -58,7 +57,7 @@ export function Nav() {
         color="blue-gray"
         className="p-1 font-normal"
       >
-        <a href="/contact-us" className="flex items-center">
+        <a href="/contact" className="flex items-center">
           Contact Us
         </a>
       </Typography>
@@ -70,17 +69,15 @@ export function Nav() {
       <Navbar className="mt-6 mb-12 border-b-2 border-gray-200 h-max max-w-full py-4 px-4 lg:px-8 lg:py-4">
         <div className="flex items-center justify-between text-blue-gray-900">
           <a href="/">
-            <img src={'/images/logo.svg'} alt='logo' height={50} width={209} />
+            <img src={'../../src/assets/images/logo.svg'} alt='logo' height={30} width={209} />
           </a>
           <div className="flex items-center gap-4">
             <div className="mr-4 hidden md:block">{navList}</div>
-            <Button
-              variant="gradient"
-              size="sm"
-              className="hidden md:inline-block"
+            <button
+              className=" bg-primary p-3 rounded-lg text-primary_variant hidden md:inline-block"
             >
-              <span><a href="/contact-us">Get Started</a></span>
-            </Button>
+              <span><a href="/contact">Get Started</a></span>
+            </button>
             <IconButton
               variant="text"
               className="ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent md:hidden"
@@ -122,8 +119,8 @@ export function Nav() {
         </div>
         <Collapse open={openNav}>
           {navList}
-          <Button variant="gradient" size="sm" fullWidth className="mb-2">
-            <span><a href="/contact-us">Get Started</a></span>          </Button>
+          <button className="mb-2 bg-primary p-3 rounded-lg text-primary_variant w-full">
+            <span><a href="/contact-us">Get Started</a></span>          </button>
         </Collapse>
       </Navbar>
 
